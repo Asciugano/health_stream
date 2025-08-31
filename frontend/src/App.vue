@@ -1,18 +1,17 @@
 <script setup>
   import { ref, onMounted } from "vue";
 
-  const message = ref("Loading...");
+  const message = ref([]);
 
   onMounted(async () => {
-    const res = await fetch("http://127.0.0.1:8000/");
-    const data await res.json();
-    message.value = data.message;
+    const res = await fetch("http://localhost:8000/health/1");
+    data.value = await res.json();
   });
 </script>
 
 <template>
-  <div class="p-4">
-    <h1 class="text-2xl font-bold">HealthStram Frontend</h1>
-    <p>{{ message }}</p>
+  <div>
+    <h1>Health Data</h1>
+    <pre>{{ data }}</pre>
   </div>
 </template>
