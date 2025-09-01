@@ -2,6 +2,14 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
 
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
 class UserBase(BaseModel):
     email: str
     username: str

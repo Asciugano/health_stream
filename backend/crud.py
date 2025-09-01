@@ -1,12 +1,12 @@
 from datetime import datetime
 from sqlalchemy.orm import Session
-import models, schemas
+import models, schemas, utils
 
 def create_user(db: Session, user: schemas.UserCreate):
     db_user = models.User(
         email=user.email,
         username=user.username,
-        password=user.password
+        password=utils.hash_password(user.password)
     )
     db.add(db_user)
     db.commit()

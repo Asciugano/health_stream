@@ -1,6 +1,7 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import auth
 import models, schemas, crud
 from database import engine, SessionLocal
 
@@ -38,3 +39,14 @@ def create_health_data(metric: schemas.HealthDataCreate, db: Session = Depends(g
 @app.get("/health/{user_id}", response_model=list[schemas.HealthData])
 def read_health_data(user_id: int, db: Session = Depends(get_db)):
     return crud.get_health_data(db=db, user_id=user_id)
+
+@app.post("/login", response_model=schemas.Token)
+def login(form_data: schemas.LoginRequest, db: Session = Depends(get_db)):
+    user = auth.authenticate_user(db=db, username=form_data.username, password=form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
+    token = auth.create_acces_token({"sub": user.username})
+    return {"access_token": token, "token_type": "bearer"}
