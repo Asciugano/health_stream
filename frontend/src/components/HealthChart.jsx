@@ -38,6 +38,12 @@ function HealthChart({ metrics }) {
         borderColor: "rgb(54, 162, 235)",
         backgroundColor: "rgba(54, 162, 235, 0.5)",
       },
+      {
+        label: "Stress Level",
+        data: metrics.map((m) => m.stress_level),
+        borderColor: "rgb(75, 192, 75)",
+        backgroundColor: "rgba(75, 192, 75, 0.5)",
+      }
     ],
   };
 

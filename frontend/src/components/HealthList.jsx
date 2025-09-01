@@ -1,20 +1,8 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-function HealthList() {
-  const [metrics, setMetrics] = useState([]);
+function HealthList({ metrics }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    axios.get('http://localhost:8000/health/1')
-      .then((res) => setMetrics(res.data))
-      .catch((e) => {
-        console.error("Axios error: ", e);
-        setError(e.message);
-      })
-      .finally(() => setLoading(false));
-  }, []);
 
   if (loading) return <p>loading metrics...</p>
   if (error) return <p>Error: {error}</p>

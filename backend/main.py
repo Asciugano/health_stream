@@ -48,5 +48,5 @@ def login(form_data: schemas.LoginRequest, db: Session = Depends(get_db)):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
         )
-    token = auth.create_acces_token({"sub": user.username})
+    token = auth.create_acces_token({"sub": user.id})
     return {"access_token": token, "token_type": "bearer"}
