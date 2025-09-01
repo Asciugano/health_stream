@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { LayoutDashboard, User, LogOut } from "lucide-react";
+import { LayoutDashboard, User, LogOut, Home } from "lucide-react";
+import NavItem from "./NavItem";
 
 function Navbar({ setToken }) {
   const navigate = useNavigate();
@@ -12,25 +13,15 @@ function Navbar({ setToken }) {
   };
 
   return (
-    <nav className="w-full bg-gray-800 text-white px-6 py-3 flex justify-between items-center shadow-md">
-      {/* Logo */}
-      <Link to="/" className="text-xl font-bold hover:text-gray-300">
-        Health Stream
-      </Link>
-
-      {/* Solo icone */}
-      <div className="flex items-center gap-6">
-        <Link to="/dashboard" className="p-2 rounded-full hover:bg-gray-700 transition">
-          <LayoutDashboard size={22} />
-        </Link>
-        <Link to="/profile" className="p-2 rounded-full hover:bg-gray-700 transition">
-          <User size={22} />
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="p-2 rounded-full hover:bg-red-600 transition"
-        >
-          <LogOut size={22} />
+    <nav className="flex justify-between items-center bg-white shadow px-4 py-2">
+      <div className="flex space-x-4">
+        <NavItem icon={Home} label={"Home"} to={'/'} />
+        <NavItem icon={User} label={"Profile"} to={'/profile'} />
+        <NavItem icon={LayoutDashboard} label={"DashBoard"} to={'/dashboard'} />
+      </div>
+      <div className="flex items-center">
+        <button onClick={handleLogout} className="flex items-center text-red-500 hover:text-red-700 transition">
+          <NavItem icon={LogOut} label={"Logout"} to={"/login"} />
         </button>
       </div>
     </nav>
