@@ -7,6 +7,7 @@ import DashBoard from './pages/DashBoard'
 import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './middleware/ProtectedRoute';
 import NavBar from './components/NavBar';
+import HomePage from './pages/HomePage';
 
 function App() {
   const [user_id, setUser_id] = useState(null);
@@ -37,7 +38,7 @@ function App() {
       <BrowserRouter>
         <NavBar setToken={setToken} setUser_id={setUser_id} />
         <Routes>
-          <Route path='/' element={<Navigate to={token ? "/dashboard" : '/login'} />} />
+          <Route path='/' element={<HomePage />} />
           <Route
             path='/dashboard'
             element={
