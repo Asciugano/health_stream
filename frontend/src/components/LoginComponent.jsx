@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
 
 function LoginComponent({ onLogin }) {
   const [formData, setFormData] = useState({
@@ -9,6 +11,8 @@ function LoginComponent({ onLogin }) {
   const [viewPsw, setViewPasswd] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +26,7 @@ function LoginComponent({ onLogin }) {
       localStorage.setItem("token", access_token);
 
       if (onLogin) onLogin(access_token);
+      navigate('/');
     } catch (e) {
       console.error(e);
       setError(e.response?.data?.detail || "Login Failed");
@@ -31,34 +36,43 @@ function LoginComponent({ onLogin }) {
   };
 
   return (
-    <div style={{ maxWidth: 400, margin: "0 auto", padding: 20 }}>
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Username</label>
+    <div className="p-6 max-w-lg mx-auto bg-white shadow rounded-md">
+      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Username */}
+        <div className="flex items-center border rounded-md px-3 py-2">
+          <User className="mr-2 text-gray-400" />
           <input
             type="text"
+            placeholder="Username"
+            className="w-full outline-none"
             value={formData.username}
             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             required
           />
         </div>
-        <div style={{ marginTop: 10 }}>
-          <label>Password</label>
-          <span>
-            <input
-              type={viewPsw ? "text" : "password"}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              required
-            />
-            <button onClick={(e) => {
-              e.preventDefault();
-              setViewPasswd(!viewPsw);
-            }}>view</button>
-          </span>
+        {/* Password */}
+        <div className="flex items-center border rounded-md px-3 py-2">
+          <Lock className="mr-2 text-gray-400" />
+          <input
+            type={viewPsw ? "text" : "password"}
+            placeholder="Password"
+            className="w-full outline-none"
+            value={formData.password}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            required
+          />
+          <button type="button" onClick={(e) => {
+            e.preventDefault();
+            setViewPasswd(!viewPsw);
+          }}
+            className="ml-2"
+          >
+            {viewPsw ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
         </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit" disabled={loading} style={{ marginTop: 15 }}>
+        {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+        <button type="submit" disabled={loading} className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>

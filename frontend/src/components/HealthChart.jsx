@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  plugins,
 } from "chart.js";
 
 // Registra SOLO questi
@@ -47,7 +48,20 @@ function HealthChart({ metrics }) {
     ],
   };
 
-  return <Line data={data} />;
+  const options = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+      },
+      legend: {
+        position: 'top',
+      },
+    },
+  };
+
+  return <Line data={data} options={options} />;
 }
 
 export default HealthChart;

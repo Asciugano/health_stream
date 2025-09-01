@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Activity, Heart, Moon, Save } from "lucide-react";
 
 function HealthForm() {
   const [formData, setFormData] = useState({
@@ -28,36 +29,62 @@ function HealthForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Add Health Metric</h3>
-      <label name="heart_rate">Heart Rate</label>
-      <input
-        type="number"
-        name="heart_rate"
-        placeholder="Heart Rate"
-        value={formData.heart_rate}
-        onChange={handleChange}
-        required
-      />
-      <label name="sleep_hours">Sleep Hours</label>
-      <input
-        type="number"
-        name="sleep_hours"
-        placeholder="Sleep Hours"
-        value={formData.sleep_hours}
-        onChange={handleChange}
-        required
-      />
-      <label name="stress_level">Stress Level</label>
-      <input
-        type="number"
-        name="stress_level"
-        placeholder="Stress Level"
-        value={formData.stress_level}
-        onChange={handleChange}
-        required
-      />
-      <button type="submit">Save</button>
+    <form onSubmit={handleSubmit} className="p-6 max-w-md mx-auto bg-white shadow rounded-lg space-y-4">
+      <h3 className="text-xl font-semibold mb-2">Add Health Metric</h3>
+      {/* Heart Rate */}
+      <div>
+        <label className="block text-gray-700 mb-1">Heart Rate</label>
+        <div className="flex items-center border rounded-lg px-3">
+          <Heart className="text-red-500" size={18} />
+          <input
+            type="number"
+            name="heart_rate"
+            placeholder="Heart Rate"
+            value={formData.heart_rate}
+            onChange={handleChange}
+            className="w-full px-2 py-2 outline-none"
+            required
+          />
+        </div>
+      </div>
+
+      {/* Sleep Hours */}
+      <div>
+        <label className="block text-gray-700 mb-1">Sleep Hours</label>
+        <div className="flex items-center border rounded-lg px-3">
+          <Moon className="text-indigo-500" size={18} />
+          <input
+            type="number"
+            name="sleep_hours"
+            placeholder="Sleep Hours"
+            value={formData.sleep_hours}
+            onChange={handleChange}
+            className="w-full px-2 py-2 outline-none"
+            required
+          />
+        </div>
+      </div>
+
+      {/* Stress Level */}
+      <div>
+        <label className="block text-gray-700 mb-1">Stress Level</label>
+        <div className="flex items-center border rounded-lg px-3">
+          <Activity className="text-green-500" size={18} />
+          <input
+            type="number"
+            name="stress_level"
+            placeholder="Stress Level"
+            value={formData.stress_level}
+            onChange={handleChange}
+            className="w-full px-2 py-2 outline-none"
+            required
+          />
+        </div>
+      </div>
+      <button type="submit" className="flex items-center justify-center gap-2 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
+        <Save size={18} />
+        Save Metric
+      </button>
     </form>
   )
 }

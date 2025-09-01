@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import './App.css'
-import HealthList from './components/HealthList'
-import HealthForm from './components/HealthForm'
-import HealthChart from './components/HealthChart'
 import axios from 'axios';
 import LoginPage from './pages/LoginPage'
-import ProtectedRoute from './middleware/ProtectedRoute'
 import { getUserIDFromToken } from './utils/token'
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import DashBoard from './pages/DashBoard'
+import ProfilePage from './pages/ProfilePage';
+import ProtectedRoute from './middleware/ProtectedRoute';
+import NavBar from './components/NavBar';
 
 function App() {
   const [user_id, setUser_id] = useState(null);
@@ -33,28 +33,27 @@ function App() {
   }, [user_id]);
 
   return (
-    <div>
-      <button onClick={() => {
-        localStorage.removeItem("token");
-        setToken(null);
-        setUser_id(null);
-      }}>Logout</button>
-      <div>
-        {token ? (
-          <div>
-            <ProtectedRoute
-              token={token}
-              setUser_id={setUser_id}
-              Component={HealthChart}
-              componentProps={{ metrics: metrics }}
-            />
-          </div>
-        ) : (
-          <LoginPage token={token} setToken={setToken} />
-        )}
-      </div>
-    </div >
-  )
+    <>
+      <BrowserRouter>
+        <NavBar setToken={setToken} setUser_id={setUser_id} />
+        <Routes>
+          <Route path='/' element={<Navigate to={token ? "/dashboard" : '/login'} />} />
+          <Route
+            path='/dashboard'
+            element={
+              <ProtectedRoute
+                token={token}
+                Component={DashBoard}
+                componentProps={{ metrics }}
+                setUser_id={setUser_id}
+              />}
+          />
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/profile' element={user_id ? <ProfilePage /> : <Navigate to="/login" />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
 }
 
 export default App
