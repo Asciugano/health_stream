@@ -7,13 +7,12 @@ function HealthList() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.post('http://localhost:8000/health/1')
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch");
-        return res.json();
+    axios.get('http://localhost:8000/health/1')
+      .then((res) => setMetrics(res.data))
+      .catch((e) => {
+        console.error("Axios error: ", e);
+        setError(e.message);
       })
-      .then((data) => setMetrics(data))
-      .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
   }, []);
 
