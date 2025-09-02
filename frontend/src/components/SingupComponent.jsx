@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { LucideMail, User, Lock, Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function SingupComponent({ onSingup }) {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -20,10 +23,12 @@ function SingupComponent({ onSingup }) {
     setError(null);
 
     try {
-      const res = await axios.post('http://localhost:8000/singup');
+      const res = await axios.post('http://localhost:8000/singup', formData);
       const { token } = res.data
       localStorage.setItem('token', token);
       onSingup(token);
+
+      navigate('/');
     } catch (e) {
       setError("Errore nella registrazione");
       console.error(e.message);
@@ -42,7 +47,7 @@ function SingupComponent({ onSingup }) {
             placeholder="Email"
             className="w-full outline-none"
             value={formData.email}
-            onChange={handleChange}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             required
           />
         </div>
@@ -54,7 +59,7 @@ function SingupComponent({ onSingup }) {
             placeholder="Username"
             className="w-full outline-none"
             value={formData.username}
-            onChange={handleChange}
+            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             required
           />
         </div>
@@ -66,7 +71,7 @@ function SingupComponent({ onSingup }) {
             placeholder="Password"
             className="w-full outline-none"
             value={formData.password}
-            onChange={handleChange}
+            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
             required
           />
           <button type="button" onClick={(e) => {
