@@ -37,9 +37,9 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <NavBar setToken={setToken} setUser_id={setUser_id} />
+        <NavBar setToken={setToken} setUser_id={setUser_id} token={token} />
         <Routes>
-          <Route path='/' element={<HomePage />} />
+          <Route path='/' element={<HomePage userID={user_id} />} />
           <Route
             path='/dashboard'
             element={
@@ -48,6 +48,7 @@ function App() {
                 Component={DashBoard}
                 componentProps={{ metrics }}
                 setUser_id={setUser_id}
+                redirectTo='/'
               />}
           />
           <Route path='/login' element={<LoginPage setToken={setToken} />} />

@@ -1,14 +1,15 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { LayoutDashboard, User, LogOut, Home } from "lucide-react";
+import { LayoutDashboard, User, LogOut, Home, LogIn } from "lucide-react";
 import NavItem from "./NavItem";
 
-function Navbar({ setToken }) {
+function Navbar({ setToken, setUser_id, token }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setToken(null);
+    setUser_id(null);
     navigate("/login");
   };
 
@@ -20,6 +21,9 @@ function Navbar({ setToken }) {
         <NavItem icon={LayoutDashboard} label={"DashBoard"} to={'/dashboard'} />
       </div>
       <div className="flex items-center">
+        {!token &&
+          <NavItem icon={LogIn} label={"Login"} to={'/login'} />
+        }
         <button onClick={handleLogout} className="flex items-center text-red-500 hover:text-red-700 transition">
           <NavItem icon={LogOut} label={"Logout"} to={"/login"} />
         </button>
