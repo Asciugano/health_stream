@@ -24,9 +24,11 @@ function Navbar({ setToken, setUser_id, token }) {
         {!token &&
           <NavItem icon={LogIn} label={"Login"} to={'/login'} />
         }
-        <button onClick={handleLogout} className="flex items-center text-red-500 hover:text-red-700 transition">
-          <NavItem icon={LogOut} label={"Logout"} to={"/login"} />
-        </button>
+        {token &&
+          <button onClick={handleLogout} className="flex items-center text-red-500 hover:text-red-700 transition">
+            <NavItem icon={LogOut} label={"Logout"} to={"/login"} />
+          </button>
+        }
       </div>
     </nav>
   );
