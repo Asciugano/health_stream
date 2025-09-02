@@ -3,16 +3,27 @@ import HealthChart from "../components/HealthChart";
 import HealthList from "../components/HealthList";
 
 function HomePage({ userID, metrics }) {
-  const fake_metrics = [
+  function random_date(start, end) {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+  };
 
+  function genFakeMestrics(count = 6) {
+    const fake_metrics = []
+    for (let i = 0; i < count; i++) {
+      fake_metrics.push(
+        {
+          created_at: random_date(new Date(2020, 0, 1), new Date()),
+          heart_rate: Math.floor(Math.random() * (100 - 60 + 1)) + 60,
+          sleep_hours: Math.floor(Math.random() * (10 - 4 + 1)) + 4,
+          stress_level: Math.floor(Math.random() * 5) + 1
+        }
+      )
+    }
 
-    { date: "2025-09-01 12:19:56.962553", heart_rate: 72, sleep_hours: 10, stress_level: 2 },
-    { date: "2025-09-02 12:19:56.962553", heart_rate: 80, sleep_hours: 7, stress_level: 3 },
-    { date: "2025-09-03 12:19:56.962553", heart_rate: 65, sleep_hours: 9, stress_level: 1 },
-    { date: "2024-09-01 12:19:56.962553", heart_rate: 93, sleep_hours: 4, stress_level: 5 },
-    { date: "2025-05-02 12:19:56.962553", heart_rate: 77, sleep_hours: 7, stress_level: 4 },
-    { date: "2025-02-03 12:19:56.962553", heart_rate: 89, sleep_hours: 8, stress_level: 1 },
-  ];
+    return fake_metrics;
+  }
+
+  const fake_metrics = genFakeMestrics();
 
   return (
     <div className="flex flex-col items-center pt-12">

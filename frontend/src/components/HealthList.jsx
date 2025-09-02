@@ -2,11 +2,6 @@ import { Activity, Calendar, Heart, Moon } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
 function HealthList({ metrics }) {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  if (loading) return <p className="text-gray-500">loading metrics...</p>
-  if (error) return <p className="text-red-600">Error: {error}</p>
   if (!metrics.length) return <p className="text-gray-500">No metrics available</p>
 
   return (
@@ -31,8 +26,8 @@ function HealthList({ metrics }) {
             </tr>
           </thead>
           <tbody>
-            {metrics.map((metric) => (
-              <tr key={metric.id} className="border-t hover:bg-gray-50 transition">
+            {metrics.map((metric, idx) => (
+              <tr key={metric.id || idx} className="border-t hover:bg-gray-50 transition">
                 <td className="px-4 py-2">{metric.heart_rate}</td>
                 <td className="px-4 py-2">{metric.sleep_hours}</td>
                 <td className="px-4 py-2">{metric.stress_level}</td>
