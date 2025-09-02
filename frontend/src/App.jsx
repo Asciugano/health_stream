@@ -58,7 +58,7 @@ function App() {
               <ProtectedRoute
                 token={token}
                 Component={ProfilePage}
-                componentProps={{ metrics: metrics, userID: user_id }}
+                componentProps={{ metrics: metrics, user_id: user_id }}
                 setUser_id={setUser_id}
               />}
           />

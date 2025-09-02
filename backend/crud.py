@@ -17,6 +17,9 @@ def create_user(db: Session, user: schemas.UserCreate):
 def get_users(db: Session, skip: int = 0, limit: int = 10):
     return db.query(models.User).offset(skip).limit(limit).all()
 
+def get_user_by_id(db: Session, userID: int):
+    return db.query(models.User).filter(models.User.id == userID).first()
+
 def create_health_data(db: Session, metric: schemas.HealthDataCreate):
     record = models.HealthData(
         user_id=metric.user_id,

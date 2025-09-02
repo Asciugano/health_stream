@@ -6,6 +6,9 @@ class LoginRequest(BaseModel):
     username: str
     password: str
 
+class GetUserById(BaseModel):
+    user_id: int
+
 class Token(BaseModel):
     access_token: str
     token_type: str

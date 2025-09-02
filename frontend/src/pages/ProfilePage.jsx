@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Mail, User } from "lucide-react";
 
-function ProfilePage({ userID, metrics }) {
+function ProfilePage({ user_id, metrics }) {
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -17,8 +17,18 @@ function ProfilePage({ userID, metrics }) {
   });
 
   useEffect(() => {
-    // TODO: chiamata API per prendere l'utente
-  }, [userID]);
+    if (!user_id) return;
+
+    try {
+      axios.post(`http://localhost:8000/user/`, {
+        user_id: user_id,
+      })
+        .then((res) => setUser(res.data))
+        .catch((e) => console.error(e));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [user_id]);
 
   const handlePasswordChange = async (e) => {
     e.prefentDefault();

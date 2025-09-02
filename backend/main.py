@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+from starlette.status import HTTP_404_NOT_FOUND
 import auth
 import models, schemas, crud
 from database import engine, SessionLocal
@@ -33,6 +34,13 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 @app.get("/users/", response_model=list[schemas.User])
 def read_users(db: Session = Depends(get_db)):
     return crud.get_users(db=db)
+
+@app.post("/user/", response_model=schemas.User)
+def get_user_by_id(userID: schemas.GetUserById, db: Session = Depends(get_db)):
+    user = crud.get_user_by_id(db=db, userID=userID.user_id)
+    if not user:
+        raise HTTPException(status_code=HTTP_404_NOT_FOUND, detail="User not found")
+    return user
 
 @app.post("/health/", response_model=schemas.HealthData)
 def create_health_data(metric: schemas.HealthDataCreate, db: Session = Depends(get_db)):
