@@ -52,14 +52,13 @@ function App() {
           />
           <Route path='/login' element={<LoginPage setToken={setToken} />} />
           <Route path='/singup' element={<SingupPage setToken={setToken} />} />
-          <Route path='/profile' element={user_id ? <ProfilePage /> : <Navigate to="/login" />} />
           <Route
             path='/profile'
             element={
               <ProtectedRoute
                 token={token}
                 Component={ProfilePage}
-                componentProps={{}}
+                componentProps={{ metrics: metrics, userID: user_id }}
                 setUser_id={setUser_id}
               />}
           />
