@@ -24,9 +24,9 @@ function SingupComponent({ onSingup }) {
 
     try {
       const res = await axios.post('http://localhost:8000/singup', formData);
-      const { token } = res.data
-      localStorage.setItem('token', token);
-      onSingup(token);
+      const { access_token } = res.data
+      localStorage.setItem('token', access_token);
+      onSingup(access_token);
 
       navigate('/');
     } catch (e) {

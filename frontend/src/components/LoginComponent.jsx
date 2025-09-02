@@ -22,7 +22,7 @@ function LoginComponent({ onLogin }) {
     try {
       const res = await axios.post("http://localhost:8000/login", formData);
 
-      const { access_token, token_type } = res.data;
+      const { access_token } = res.data;
       localStorage.setItem("token", access_token);
 
       if (onLogin) onLogin(access_token);

@@ -24,9 +24,11 @@ app.add_middleware(
     allow_headers=['*'],
 )
 
-@app.post("/singup/", response_model=schemas.User)
+@app.post("/singup/", response_model=schemas.Token)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
-    return crud.create_user(db=db, user=user)
+    user = crud.create_user(db=db, user=user)
+    token = auth.create_acces_token({ "sub": user.id })
+    return {"access_token": token, "token_type": "bearer"}
 
 @app.get("/users/", response_model=list[schemas.User])
 def read_users(db: Session = Depends(get_db)):
