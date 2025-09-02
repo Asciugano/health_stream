@@ -1,44 +1,51 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Eye, EyeOff, Lock, User } from "lucide-react";
+import { LucideMail, User, Lock, Eye, EyeOff } from "lucide-react";
 
-function LoginComponent({ onLogin }) {
+function SingupComponent({ onSingup }) {
   const [formData, setFormData] = useState({
+    email: "",
     username: "",
     password: "",
   });
-  const [viewPsw, setViewPasswd] = useState(false);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [viewPsw, setViewPasswd] = useState(false);
 
-  const navigate = useNavigate();
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
 
     try {
-      const res = await axios.post("http://localhost:8000/login", formData);
-
-      const { access_token, token_type } = res.data;
-      localStorage.setItem("token", access_token);
-
-      if (onLogin) onLogin(access_token);
-      navigate('/');
+      const res = await axios.post('http://localhost:8000/singup');
+      const { token } = res.data
+      localStorage.setItem('token', token);
+      onSingup(token);
     } catch (e) {
-      console.error(e);
-      setError(e.response?.data?.detail || "Login Failed");
-    } finally {
-      setLoading(false);
+      setError("Errore nella registrazione");
+      console.error(e.message);
     }
   };
 
   return (
     <div className="p-6 max-w-lg mx-auto bg-white shadow rounded-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+      <h2 className="text-2xl font-bold mb-6 text-center">Registrati</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Email */}
+        <div className="flex items-center border rounded-md px-3 py-2">
+          <LucideMail className="mr-2 text-gray-400" />
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full outline-none"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
         {/* Username */}
         <div className="flex items-center border rounded-md px-3 py-2">
           <User className="mr-2 text-gray-400" />
@@ -47,7 +54,7 @@ function LoginComponent({ onLogin }) {
             placeholder="Username"
             className="w-full outline-none"
             value={formData.username}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+            onChange={handleChange}
             required
           />
         </div>
@@ -59,7 +66,7 @@ function LoginComponent({ onLogin }) {
             placeholder="Password"
             className="w-full outline-none"
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChange={handleChange}
             required
           />
           <button type="button" onClick={(e) => {
@@ -72,19 +79,18 @@ function LoginComponent({ onLogin }) {
           </button>
         </div>
         {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-        <button type="submit" disabled={loading} className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-          {loading ? "Logging in..." : "Login"}
+        <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+          Sing Up
         </button>
       </form>
 
-      {/* Link per registrarsi */}
+      {/* Link per accedere */}
       <p className="text-sm mt-4">
-        Non hai un account?{" "}
-        <a href="/singup" className="text-blue-500 hover:underline">Registrati</a>
+        Hai gia un account?{" "}
+        <a href="/login" className="text-blue-500 hover:underline">Accedi</a>
       </p>
     </div>
-  )
+  );
 }
 
-export default LoginComponent;
-
+export default SingupComponent;

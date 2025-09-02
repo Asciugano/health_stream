@@ -8,6 +8,7 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './middleware/ProtectedRoute';
 import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
+import SingupPage from './pages/SingupPage';
 
 function App() {
   const [user_id, setUser_id] = useState(null);
@@ -49,7 +50,8 @@ function App() {
                 setUser_id={setUser_id}
               />}
           />
-          <Route path='/login' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage setToken={setToken} />} />
+          <Route path='/singup' element={<SingupPage setToken={setToken} />} />
           <Route path='/profile' element={user_id ? <ProfilePage /> : <Navigate to="/login" />} />
         </Routes>
       </BrowserRouter>
