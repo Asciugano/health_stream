@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Mail, User } from "lucide-react";
+import { Eye, EyeOff, Mail, User } from "lucide-react";
 
 function ProfilePage({ user_id, setToken }) {
   const [passwordData, setPasswordData] = useState({
@@ -8,6 +8,11 @@ function ProfilePage({ user_id, setToken }) {
     newPassword: "",
     confirmPassword: "",
   });
+  const [viewPassword, setviewPassword] = useState({
+    oldPassword: false,
+    newPassword: false,
+    confirmPassword: false,
+  })
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState({
@@ -92,34 +97,70 @@ function ProfilePage({ user_id, setToken }) {
 
         <form onSubmit={handlePasswordChange} className="flex flex-col gap-4">
           <div className="flex flex-col">
-            <label className="mb-1 font-medium text-gray-700">Old Password</label>
-            <input
-              type="password"
-              value={passwordData.oldPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, oldPassword: e.target.value })}
-              className="border rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
+            <label className="mb-1 font-medium text-gray-700">Vecchia Password</label>
+            <div className="relative">
+              <input
+                type={viewPassword.oldPassword ? "text" : "password"}
+                value={passwordData.oldPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, oldPassword: e.target.value })}
+                className="border rounded-md p-2 pr-10 w-full outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-2 flex items-center text-gray-600"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setviewPassword({ ...viewPassword, oldPassword: !viewPassword.oldPassword })
+                }}
+              >
+                {viewPassword.oldPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+            </div>
           </div>
           <div className="flex flex-col">
             <label className="mb-1 font-medium text-gray-700">New Password</label>
-            <input
-              type="password"
-              value={passwordData.newPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
-              className="border rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
+            <div className="relative">
+              <input
+                type={viewPassword.newPassword ? "text" : "password"}
+                value={passwordData.newPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                className="border rounded-md p-2 pr-10 w-full outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-2 flex items-center text-gray-600"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setviewPassword({ ...viewPassword, newPassword: !viewPassword.newPassword })
+                }}
+              >
+                {viewPassword.newPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+            </div>
           </div>
           <div className="flex flex-col">
             <label className="mb-1 font-medium text-gray-700">Conferma Password</label>
-            <input
-              type="password"
-              value={passwordData.confirmPassword}
-              onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
-              className="border rounded-md p-2 outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
+            <div className="relative">
+              <input
+                type={viewPassword.confirmPassword ? "text" : "password"}
+                value={passwordData.confirmPassword}
+                onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                className="border rounded-md p-2 pr-10 w-full outline-none focus:ring-2 focus:ring-blue-400"
+                required
+              />
+              <button
+                type="button"
+                className="absolute inset-y-0 right-2 flex items-center text-gray-600"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setviewPassword({ ...viewPassword, confirmPassword: !viewPassword.confirmPassword })
+                }}
+              >
+                {viewPassword.confirmPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+              </button>
+            </div>
           </div>
           <button
             type="submit"
