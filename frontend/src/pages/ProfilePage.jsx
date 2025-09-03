@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Mail, User } from "lucide-react";
 
-function ProfilePage({ user_id, metrics }) {
+function ProfilePage({ user_id, setToken }) {
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -11,7 +11,7 @@ function ProfilePage({ user_id, metrics }) {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
   const [user, setUser] = useState({
-    usename: "",
+    username: "",
     email: "",
     password: "password",
   });
@@ -31,7 +31,7 @@ function ProfilePage({ user_id, metrics }) {
   }, [user_id]);
 
   const handlePasswordChange = async (e) => {
-    e.prefentDefault();
+    e.preventDefault();
     if (passwordData.newPassword === passwordData.oldPassword) {
       setMessage({ type: "Error", msg: "Errore nel cambiare la password" });
       setLoading(false);
@@ -45,8 +45,13 @@ function ProfilePage({ user_id, metrics }) {
 
     setLoading(true);
     try {
-      // TODO: chiamata all'API per cambiare la password
+      const res = await axios.put('http://localhost:8000/profile/password', {
+        "user_id": user_id,
+        "old_password": passwordData.oldPassword,
+        "new_password": passwordData.newPassword,
+      });
 
+      setToken(null);
       setMessage({ type: "Success", msg: "Password cambiata con successo" });
       setPasswordData({
         oldPassword: "",

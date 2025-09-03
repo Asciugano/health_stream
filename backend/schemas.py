@@ -1,10 +1,13 @@
 from datetime import datetime
 from pydantic import BaseModel
+
+import models
 from typing import List, Optional
 
 class LoginRequest(BaseModel):
     username: str
     password: str
+
 
 class GetUserById(BaseModel):
     user_id: int
@@ -19,13 +22,19 @@ class UserBase(BaseModel):
     password: str
 
 class UserCreate(UserBase): 
-    pass
+    password: str
 
 class User(UserBase):
     id: int
-    class Config:
-        orm_mode = True
 
+    model_config = {
+        "from_attributes": True
+    }
+
+class ChangePasswordRequest(BaseModel):
+    user_id: int
+    old_password: str
+    new_password: str
 
 class HealthDataBase(BaseModel):
     heart_rate: float
@@ -39,5 +48,7 @@ class HealthDataCreate(HealthDataBase):
 class HealthData(HealthDataBase):
     id: int
     user_id: int
-    class Config:
-        orm_mode = True
+
+    model_config = {
+        "from_attributes": True
+    }

@@ -1,8 +1,11 @@
 from datetime import datetime, timedelta
+from fastapi import HTTPException
 from jose import jwt
 from sqlalchemy.orm import Session
+from starlette.status import HTTP_404_NOT_FOUND
+import crud
 from models import User
-from utils import verify_password
+import utils
 
 SECRET_KEY = "SECRET_KEY_12345"
 ALGORITHM = "HS256"
@@ -18,7 +21,28 @@ def authenticate_user(db: Session, username: str, password: str):
     user = db.query(User).filter(User.username == username).first()
     if not user:
         return False
-    if not verify_password(password, str(user.password)):
+    if not utils.verify_password(password, str(user.password)):
         return False
+
+    return user
+
+def change_password(db: Session, userID: int, old_password: str, new_password: str):
+    user = crud.get_user_by_id(db=db, userID=userID);
+    if not user:
+        raise HTTPException(
+            status_code=HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    user = authenticate_user(db=db, username=str(user.username), password=old_password)
+
+    if old_password == new_password:
+        return False
+
+    user.password = utils.hash_password(new_password)
+
+    db.add(user)
+    db.commit()
+    db.refresh(user)
 
     return user

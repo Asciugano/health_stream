@@ -60,3 +60,15 @@ def login(form_data: schemas.LoginRequest, db: Session = Depends(get_db)):
         )
     token = auth.create_acces_token({"sub": user.id})
     return {"access_token": token, "token_type": "bearer"}
+
+@app.put("/profile/password", response_model=schemas.Token)
+def change_password(req: schemas.ChangePasswordRequest, db: Session = Depends(get_db)):
+    user = auth.change_password(db=db, userID=req.user_id, old_password=req.old_password, new_password=req.new_password)
+    if not user: 
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials"
+        )
+    
+    token = auth.create_acces_token({"sub": user.id})
+    return {"access_token": token, "token_type": "bearer"}
