@@ -23,7 +23,7 @@ function HomePage({ userID, metrics }) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const last = (metrics && metrics.length > 0) ? metrics[metrics.length - 1] : null;
+  const last = (metrics && metrics.length > 0) ? metrics[0] : null;
 
   const data = {
     labels: ['Heart Rate', "Sleep Hours", 'Stress Level'],
