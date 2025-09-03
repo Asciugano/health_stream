@@ -9,10 +9,8 @@ import {
   Title,
   Tooltip,
   Legend,
-  plugins,
 } from "chart.js";
 
-// Registra SOLO questi
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,8 +22,12 @@ ChartJS.register(
 );
 
 function HealthChart({ metrics }) {
+  if (!metrics || !Array.isArray(metrics) || metrics.length === 0) {
+    return <p className="text-gray-500">Nessun dato disponibile</p>
+  }
+
   const data = {
-    labels: metrics.map((m) => new Date(m.created_at).toLocaleDateString()),
+    labels: metrics.map((m) => m.created_at ? new Date(m.created_at).toLocaleDateString() : "?"),
     datasets: [
       {
         label: "Heart Rate",

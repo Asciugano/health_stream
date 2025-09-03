@@ -21,7 +21,7 @@ function HealthForm({ metrics, setMetrics }) {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:8000/health', formData);
-      setMetrics(...metrics, res.data);
+      setMetrics([...metrics, res.data]);
       setFormData({ ...formData, heart_rate: 0.0, sleep_hours: 0.0, stress_level: 0.0 });
     } catch (e) {
       console.error("error saving metric:", e);

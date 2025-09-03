@@ -33,7 +33,7 @@ function App() {
     } catch (e) {
       console.error(e);
     }
-  }, [user_id, metrics]);
+  }, [user_id]);
 
   return (
     <>
