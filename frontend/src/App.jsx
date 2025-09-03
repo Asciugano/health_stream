@@ -33,7 +33,7 @@ function App() {
     } catch (e) {
       console.error(e);
     }
-  }, [user_id]);
+  }, [user_id, metrics]);
 
   return (
     <>
@@ -60,7 +60,7 @@ function App() {
                 token={token}
                 Component={HealthForm}
                 setUser_id={setUser_id}
-                componentProps={{}}
+                componentProps={{ setMetrics: setMetrics, metrics: metrics }}
                 redirectTo='/login'
               />
             }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Activity, Heart, Moon, Save } from "lucide-react";
 
-function HealthForm() {
+function HealthForm({ metrics, setMetrics }) {
   const [formData, setFormData] = useState({
     user_id: 1,
     heart_rate: 0.0,
@@ -21,7 +21,7 @@ function HealthForm() {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:8000/health', formData);
-      // onAdd(res.data);
+      setMetrics(...metrics, res.data);
       setFormData({ ...formData, heart_rate: 0.0, sleep_hours: 0.0, stress_level: 0.0 });
     } catch (e) {
       console.error("error saving metric:", e);
