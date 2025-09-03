@@ -4,11 +4,64 @@ import HealthList from "../components/HealthList";
 import axios from "axios";
 import { Activity, Heart, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Bar } from 'react-chartjs-2';
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 function HomePage({ userID, metrics }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const last = (metrics && metrics.length > 0) ? metrics[metrics.length - 1] : null;
+
+  const data = {
+    labels: ['Heart Rate', "Sleep Hours", 'Stress Level'],
+    datasets: [
+      {
+        label: "Media",
+        data: [
+          average(metrics, "heart_rate"),
+          average(metrics, "sleep_hours"),
+          average(metrics, "stress_level"),
+        ],
+        backgroundColor: "rgba(54, 162, 235, 0.6)",
+      },
+      {
+        label: "Ultima metrica",
+        data: [
+          last?.heart_rate || 0,
+          last?.sleep_hours || 0,
+          last?.stress_level || 0,
+        ],
+        backgroundColor: "rgba(255, 99, 132, 0.6)",
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: { position: "top" },
+      tooltip: { mode: "index", intersect: false },
+    },
+  };
+
+  function average(arr, key) {
+    if (!arr || arr.length === 0) return 0;
+    const sum = arr.reduce((acc, item) => acc + (item[key] || 0), 0);
+    return Math.round(sum / arr.length);
+  }
 
   function random_date(start, end) {
     return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
@@ -80,25 +133,26 @@ function HomePage({ userID, metrics }) {
 
       {/* Metrics cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <h2 className="text-xl font-semibold">Media: </h2>
         <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
           <Heart size={32} className="text-red-500" />
           <div>
             <p className="text-gray-500">Battito medio</p>
-            <p className="font-semibold text-lg">{metrics?.heart_rate || 0} bpm</p>
+            <p className="font-semibold text-lg">{average(metrics, "heart_rate")} bpm</p>
           </div>
         </div>
         <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
           <Activity size={32} className="text-green-500" />
           <div>
             <p className="text-gray-500">Livello di stres</p>
-            <p className="font-semibold text-lg">{metrics?.stress_level || 0}</p>
+            <p className="font-semibold text-lg">{average(metrics, "stress_level")}</p>
           </div>
         </div>
         <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
           <Moon size={32} className="text-indigo-500" />
           <div>
             <p className="text-gray-500">Ore di Sonno</p>
-            <p className="font-semibold text-lg">{metrics?.sleep_hours || 0} h</p>
+            <p className="font-semibold text-lg">{average(metrics, "sleep_hours")} h</p>
           </div>
         </div>
       </div>
@@ -106,6 +160,7 @@ function HomePage({ userID, metrics }) {
       {/* Grafico andamento */}
       <div className="bg-white p-6 rounded-xl shadow">
         <h3 className="text-lg font-semibold mb-4">Andamento settimanale</h3>
+        <Bar data={data} options={options} />
       </div>
     </div>
   )
