@@ -8,6 +8,7 @@ import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './middleware/ProtectedRoute';
 import NavBar from './components/NavBar';
 import HomePage from './pages/HomePage';
+import HealthForm from './components/HealthForm.jsx';
 import SingupPage from './pages/SingupPage';
 
 function App() {
@@ -39,7 +40,7 @@ function App() {
       <BrowserRouter>
         <NavBar setToken={setToken} setUser_id={setUser_id} token={token} />
         <Routes>
-          <Route path='/' element={<HomePage userID={user_id} />} />
+          <Route path='/' element={<HomePage userID={user_id} metrics={metrics} />} />
           <Route
             path='/dashboard'
             element={
@@ -52,6 +53,18 @@ function App() {
           />
           <Route path='/login' element={<LoginPage setToken={setToken} />} />
           <Route path='/singup' element={<SingupPage setToken={setToken} />} />
+          <Route
+            path='/metrics'
+            element={
+              <ProtectedRoute
+                token={token}
+                Component={HealthForm}
+                setUser_id={setUser_id}
+                componentProps={{}}
+                redirectTo='/login'
+              />
+            }
+          />
           <Route
             path='/profile'
             element={

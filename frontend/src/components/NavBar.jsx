@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { LayoutDashboard, User, LogOut, Home, LogIn } from "lucide-react";
+import { LayoutDashboard, User, LogOut, Home, LogIn, ChartBar } from "lucide-react";
 import NavItem from "./NavItem";
 
 function Navbar({ setToken, setUser_id, token }) {
@@ -19,6 +19,7 @@ function Navbar({ setToken, setUser_id, token }) {
         <NavItem icon={Home} label={"Home"} to={'/'} />
         <NavItem icon={User} label={"Profile"} to={'/profile'} />
         <NavItem icon={LayoutDashboard} label={"DashBoard"} to={'/dashboard'} />
+        <NavItem icon={ChartBar} label={"Crea Metrics"} to={'/metrics'} />
       </div>
       <div className="flex items-center">
         {!token &&
