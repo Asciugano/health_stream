@@ -78,6 +78,7 @@ def change_password(req: schemas.ChangePasswordRequest, db: Session = Depends(ge
 
 @app.post("/health/import")
 async def import_metrics(userID: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    import tempfile, zipfile, os
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         tmp.write(await file.read())
         tmp_path = tmp.name
@@ -92,10 +93,10 @@ async def import_metrics(userID: int, file: UploadFile = File(...), db: Session 
         metric = schemas.HealthDataCreate(
             user_id=userID,
             heart_rate=m["heart_rate"],
-            sleep_hours=m["sleep_hour"],
+            sleep_hours=m["sleep_hours"],
             stress_level=m['stress_level'],
             created_at=m['created_at'],
         )
         crud.create_health_data(db=db, metric=metric)
 
-    return {"status": "ok", "imported": len(metrics)}
+    return {"status": "ok", "importedMetrics": metrics}

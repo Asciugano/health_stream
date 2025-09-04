@@ -8,12 +8,12 @@ function HealthImport({ setMetrics, metrics, userID }) {
   const [showHelp, setShowHelp] = useState(false);
 
   const handleFileChange = (e) => {
-    e.prefentDefalult();
+    e.preventDefault();
     setFile(e.target.files[0]);
   }
 
   const handleUpload = async (e) => {
-    e.prefentDefalult();
+    e.preventDefault();
     if (!file) return;
 
     const formData = new FormData();
@@ -26,7 +26,7 @@ function HealthImport({ setMetrics, metrics, userID }) {
         headers: { "Content-Type": "multipart/formData" },
       });
 
-      setMetrics([...metrics, res.data.imported]);
+      setMetrics([...metrics, res.data.importedMetrics]);
     } catch (e) {
       console.error(e)
     } finally {
