@@ -60,7 +60,7 @@ function App() {
                 token={token}
                 Component={HealthForm}
                 setUser_id={setUser_id}
-                componentProps={{ setMetrics: setMetrics, metrics: metrics }}
+                componentProps={{ setMetrics: setMetrics, metrics: metrics, user_id: user_id }}
                 redirectTo='/login'
               />
             }

@@ -1,10 +1,13 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, File, HTTPException, UploadFile, status
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from starlette.status import HTTP_404_NOT_FOUND
 import auth
-import models, schemas, crud
+import models, schemas, crud, parser
 from database import engine, SessionLocal
+import zipfile
+import tempfile
+import os
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -72,3 +75,27 @@ def change_password(req: schemas.ChangePasswordRequest, db: Session = Depends(ge
     
     token = auth.create_acces_token({"sub": user.id})
     return {"access_token": token, "token_type": "bearer"}
+
+@app.post("/health/import")
+async def import_metrics(userID: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+    with tempfile.NamedTemporaryFile(delete=False) as tmp:
+        tmp.write(await file.read())
+        tmp_path = tmp.name
+
+    with zipfile.ZipFile(tmp_path, "r") as zip_ref:
+        zip_ref.extractall(tempfile.gettempdir())
+        export_path = os.path.join(tempfile.gettempdir(), "export.xml")
+
+    metrics = parser.parse_health_export(export_path)
+
+    for m in metrics:
+        metric = schemas.HealthDataCreate(
+            user_id=userID,
+            heart_rate=m["heart_rate"],
+            sleep_hours=m["sleep_hour"],
+            stress_level=m['stress_level'],
+            created_at=m['created_at'],
+        )
+        crud.create_health_data(db=db, metric=metric)
+
+    return {"status": "ok", "imported": len(metrics)}

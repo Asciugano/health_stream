@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Activity, Heart, Moon, Save } from "lucide-react";
+import HealthImport from "./HealthImport";
 
-function HealthForm({ metrics, setMetrics }) {
+function HealthForm({ metrics, setMetrics, user_id }) {
   const [formData, setFormData] = useState({
     user_id: 1,
     heart_rate: 0.0,
@@ -31,10 +32,10 @@ function HealthForm({ metrics, setMetrics }) {
   return (
     <div className="flex justify-center min-h-[calc(100vh-64px)] pt-20 items-start">
       <form onSubmit={handleSubmit} className="p-6 max-w-md mx-auto bg-white shadow rounded-lg space-y-4">
-        <h3 className="text-xl font-semibold mb-2">Add Health Metric</h3>
+        <h3 className="text-xl font-semibold mb-2">Aggiungi metriche</h3>
         {/* Heart Rate */}
         <div>
-          <label className="block text-gray-700 mb-1">Heart Rate</label>
+          <label className="block text-gray-700 mb-1">Battito cardiaco</label>
           <div className="flex items-center border rounded-lg px-3">
             <Heart className="text-red-500" size={18} />
             <input
@@ -51,7 +52,7 @@ function HealthForm({ metrics, setMetrics }) {
 
         {/* Sleep Hours */}
         <div>
-          <label className="block text-gray-700 mb-1">Sleep Hours</label>
+          <label className="block text-gray-700 mb-1">Ore di sonno</label>
           <div className="flex items-center border rounded-lg px-3">
             <Moon className="text-indigo-500" size={18} />
             <input
@@ -68,7 +69,7 @@ function HealthForm({ metrics, setMetrics }) {
 
         {/* Stress Level */}
         <div>
-          <label className="block text-gray-700 mb-1">Stress Level</label>
+          <label className="block text-gray-700 mb-1">Livello di stress</label>
           <div className="flex items-center border rounded-lg px-3">
             <Activity className="text-green-500" size={18} />
             <input
@@ -82,10 +83,23 @@ function HealthForm({ metrics, setMetrics }) {
             />
           </div>
         </div>
+
+        {/* Save Button */}
         <button type="submit" className="flex items-center justify-center gap-2 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition">
           <Save size={18} />
-          Save Metric
+          Salva Metrica
         </button>
+
+        {/* Divider */}
+        <div className="border-t my-4"></div>
+        <div className="flex flex-col gap-2">
+          {/* Import Data */}
+          <HealthImport
+            setMetrics={setMetrics}
+            metrics={metrics}
+            userID={user_id}
+          />
+        </div>
       </form>
     </div>
   );
